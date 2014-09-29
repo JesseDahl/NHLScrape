@@ -1,0 +1,32 @@
+eventNumber
+period
+strength
+time elapsed/remaining
+event
+description (several formats)
+awayOnIcePlayers
+    table tr td1 table tr td:nth-child(1) font = name/number/position
+    table tr td1 table tr td:nth-child(2) font = position
+    table tr td3...6 table tr td:nth-child(1) font 
+homeOnIcePlayers
+    table tr td1 table tr td:nth-child(1) font = name/number/position
+    table tr td1 table tr td:nth-child(2) font = position
+    table tr td3...6 table tr td:nth-child(1) font 
+
+
+event - description formats
+PSTR - Period Start- Local time: 5:22 PDT
+FAC - NYR won Neu. Zone - NYR #21 STEPAN vs L.A #11 KOPITAR    
+HIT - L.A #23 BROWN HIT NYR #18 STAAL, Off. Zone
+STOP - OFFSIDE
+STOP - PUCK IN NETTING
+PENL - NYR #61 NASH Hooking(2 min), Off. Zone Drawn By: L.A #6 MUZZIN
+GIVE - L.A GIVEAWAY - #12 GABORIK, Off. Zone
+SHOT - L.A ONGOAL - #8 DOUGHTY, Slap, Off. Zone, 40 ft.
+BLOCK - L.A #70 PEARSON BLOCKED BY NYR #61 NASH, Wrist, Def. Zone
+MISS - L.A #33 MITCHELL, Slap, Wide of Net, Off. Zone, 38 ft.
+GOAL - L.A #14 WILLIAMS(9), Backhand, Off. Zone, 15 ft.
+       Assists: #74 KING(8); #28 STOLL(3)
+TAKE - L.A TAKEAWAY - #14 WILLIAMS, Def. Zone
+PEND - Period End- Local time: 5:58 PDT
+GEND - Game End- Local time: 9:26 PDT       
