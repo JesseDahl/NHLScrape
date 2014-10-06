@@ -7,7 +7,6 @@ module.exports = (function() {
         var list = [];
         
         $(el).children("table").children("tr").children("td").each(function() {
-            console.log(this);
             var number;
             var position;
             var title = $(this).find("table tr td font").attr("title");
@@ -31,13 +30,14 @@ module.exports = (function() {
         var tds = $(row).children("td");
         var result = {};
         
-        result.eventNumber = tds.eq(0).text();
-        result.period = tds.eq(1).text();
-        result.strength = tds.eq(2).text();
-        result.timeElapsed = tds.eq(3).text().split(/\s+/)[0]; 
-        result.timeRemaining = tds.eq(3).text().split(/\s+/)[1];
-        result.event = tds.eq(4).text();
-        result.description = tds.eq(5).text();
+        result.eventNumber = tds.eq(0).text().trim();
+        result.period = tds.eq(1).text().trim();
+        result.strength = tds.eq(2).text().trim();
+        result.timeElapsed = tds.eq(3).html().split('<br>')[0].trim(); 
+        result.timeRemaining = tds.eq(3).html().split('<br>')[1].trim();
+        
+        result.event = tds.eq(4).text().trim();
+        result.description = tds.eq(5).text().trim();
         result.awayOnIcePlayers = processPlayersOnIce(tds.eq(6));
         result.homeOnIcePlayers = processPlayersOnIce(tds.eq(7));
         
@@ -48,19 +48,21 @@ module.exports = (function() {
         $ = cheerio.load(domString);
         
         var rows = $('tr.evenColor');
-        console.log($(rows[0]).html());
+        
         var processedRow = {};
+        var processedRows = [];
         
         rows.each(function(key, val) {
-            console.log("*********************************");
-            console.log($(key).html());
-            //console.log(val);
-            console.log("*********************************");
-            
+            processedRow = {};
             processedRow = processRow(val);        
+            
+            processedRows.push(processedRow);
         });
+        console.log('&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&');
+        console.log(processedRows);
+        console.log('&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&');
         
-        return processedRow;
+        return processedRows;
     }
 
     return {

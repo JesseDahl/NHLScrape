@@ -1,4 +1,4 @@
-/*var processor = require('../src/rowsProcessor.js');
+var processor = require('../src/rowsProcessor.js');
 
 describe('rows processor', function() {
     var body;
@@ -9,12 +9,8 @@ describe('rows processor', function() {
     });
     
     it('should extract the correct text values for a single row', function() {
-        var p = processor.run(body);
-        
-        console.log("JESSEJESSEJESSEJESSEJESSEJESSEJESSEJESSEJESSEJESSE");
-        console.log(p);
-        console.log("JESSEJESSEJESSEJESSEJESSEJESSEJESSEJESSEJESSEJESSE");
-        
+        var p = processor.run(body)[0];
+         
         expect(p.eventNumber).toEqual("2");
         expect(p.period).toBe("1");
         expect(p.strength).toBe("EV");
@@ -99,4 +95,4 @@ describe('rows processor', function() {
         });
         expect(p.homeOnIcePlayers.length).toBe(6);
     });
-});*/
+});

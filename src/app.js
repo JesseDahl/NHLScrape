@@ -15,8 +15,7 @@ var getUrl = function(fn) {
 }
 
 var domString = getUrl(function(err, resp, body) {
-    //console.log(body);
     var bla = rowsProcessor.run(body);
+    //console.log(bla);
+    // console.log(bla.awayOnIcePlayers);
 });
-//console.log(domString);
-//var bla = rowsProcessor.run();
