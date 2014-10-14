@@ -1,4 +1,4 @@
-var cheerio = require('cheerio');
+var cheerio = require('cheerio'); 
 
 module.exports = (function() {  
     var $;
@@ -58,9 +58,6 @@ module.exports = (function() {
             
             processedRows.push(processedRow);
         });
-        console.log('&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&');
-        console.log(processedRows);
-        console.log('&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&');
         
         return processedRows;
     }
