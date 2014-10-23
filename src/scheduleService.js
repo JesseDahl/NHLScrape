@@ -8,12 +8,12 @@ module.exports = (function() {
     var scheduleUrl = 'http://www.nhl.com/ice/schedulebyday.htm?date='
     var gamesInfo = [];
     
-    var getGameSchedule = function(startDate, endDate) { 
+    var getGameSchedule = function(startDate, endDate, callback) { 
         var currentDate = moment(startDate, 'MM/DD/YYYY');
         endDate = moment(endDate, 'MM/DD/YYYY');
 
         processSchedulePage(currentDate, endDate.add(1, 'days'), function() {
-            console.log(gamesInfo);
+            callback(gamesInfo);
         });
     };
     
@@ -24,6 +24,7 @@ module.exports = (function() {
         }
         
         request(scheduleUrl + cur.format('MM/DD/YYYY'), function(err, resp, body) {
+            console.log('making request to ' + scheduleUrl + cur.format('MM/DD/YYYY'));
             if (!err && resp.statusCode == 200) {
                 $ = cheerio.load(body);
                 
