@@ -24,6 +24,7 @@ module.exports = (function() {
         }
         
         request(scheduleUrl + cur.format('MM/DD/YYYY'), function(err, resp, body) {
+            body = body.split("&nbsp;").join(" ");
             console.log('making request to ' + scheduleUrl + cur.format('MM/DD/YYYY'));
             if (!err && resp.statusCode == 200) {
                 $ = cheerio.load(body);

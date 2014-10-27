@@ -9,7 +9,8 @@ var intervalService = require('./intervalService.js');
 var pbpConverter = require('./pbpConverter.js');
 
 var main = function() {
-    urlService.getGameSchedule('10/01/2014', moment().format('MM/DD/YYYY'), function(data) {
+    //urlService.getGameSchedule('10/01/2014', moment().format('MM/DD/YYYY'), function(data) {
+    urlService.getGameSchedule('10/17/2014', '10/17/2014', function(data) {
         data.forEach(function(val) {
             var url = 'http://www.nhl.com/scores/htmlreports/20142015/PL' + val.gameId + '.HTM';
             var delay = intervalService.getNextWait([50, 1500]);
@@ -25,25 +26,26 @@ function writeLogToFile(url, delay) {
     setTimeout(function() {
         var pageHTML = getPageHTML(url, function(err, resp, body) {
             var logJSON = rowsProcessor.run(body);
-            var filePath = "pbp\\json\\" + url.slice(url.length - 10, url.length - 4) + ".json";
-            fs.writeFile(filePath, JSON.stringify(logJSON, null, 4), function(err) {
+            var jsonPath = "pbp\\json\\" + url.slice(url.length - 10, url.length - 4) + ".json";
+            fs.writeFile(jsonPath, JSON.stringify(logJSON, null, 4), function(err) {
                 //console.log('file successfully written');                                         
             });
-            /*
+            
             var csv = pbpConverter.json2Csv(logJSON);
             
-            filePath = "pbp\\csv\\" + url.slice(url.length - 10, url.length - 4) + ".csv";
-            fs.writeFile(filePath, csv, function(err) {
+            var csvPath = "pbp\\csv\\" + url.slice(url.length - 10, url.length - 4) + ".csv";
+            fs.writeFile(csvPath, csv, function(err) {
                 console.log('csv written');            
-            });*/
+            });
             
-            //console.log(csv);
         });
     }, delay);
 }
 
 var getPageHTML = function(url, callback) {
     request(url, function(err, resp, body) {
+        body = body.split("&nbsp;").join(" ");
+        
         console.log('making request to ' + url);
         if (!err && resp.statusCode == 200) {
             callback(err, resp, body);
