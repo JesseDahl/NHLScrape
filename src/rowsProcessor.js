@@ -1,4 +1,5 @@
 var cheerio = require('cheerio'); 
+var request = require('request');
 
 module.exports = (function() {  
     var $;
@@ -61,8 +62,25 @@ module.exports = (function() {
         
         return processedRows;
     }
+    
+    var getPageHTML = function(url, callback) {
+        request({
+            url: url,
+            headers: {
+                'User-Agent': 'Mozilla/5.0 (Windows NT 6.3; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/37.0.2049.0 Safari/537.36'
+            }}, 
+            function(err, resp, body) {
+                body = body.split("&nbsp;").join(" ");
+                
+                console.log('making request to ' + url);
+                if (!err && resp.statusCode == 200) {
+                    callback(err, resp, body);
+                }
+        });
+    }    
 
     return {
-        run: run
+        run: run,
+        getPageHTML: getPageHTML
     };
 })();

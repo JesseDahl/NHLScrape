@@ -4,51 +4,66 @@ var mysql = require('mysql');
 var moment = require('moment');
 var fs = require('fs');
 var rowsProcessor = require('./rowsProcessor.js');
-var urlService = require('./scheduleService.js');
+var scheduleService = require('./scheduleService.js');
 var intervalService = require('./intervalService.js');
 var pbpConverter = require('./pbpConverter.js');
 
 var main = function() {
-    //urlService.getGameSchedule('10/01/2014', moment().format('MM/DD/YYYY'), function(data) {
-    urlService.getGameSchedule('10/17/2014', '10/17/2014', function(data) {
-        data.forEach(function(val) {
-            var url = 'http://www.nhl.com/scores/htmlreports/20142015/PL' + val.gameId + '.HTM';
-            var delay = intervalService.getNextWait([50, 1500]);
-            writeLogToFile(url, delay);
+    var pageDate;
+    
+    //scheduleService.getGameSchedule('10/27/2014', moment().format('MM/DD/YYYY'), function(data) {
+    scheduleService.getGameSchedule('03/01/2014', '03/02/2014', function(data) {        
+        data.forEach(function(gamesOnDate) {
+            pageDate = moment(gamesOnDate.date, 'MM/DD/YYYY');
+            console.log(pageDate.format('MM/DD/YYYY'));
+            
+            var scheduleFilePath = "data\\schedule\\" + gamesOnDate.date.split("/").join("") + ".json";
+            fs.writeFile(scheduleFilePath, JSON.stringify(gamesOnDate, null, 4), function(err) {
+                if (err) console.log('error writing schedule file');
+            });
+            
+            gamesOnDate.games.forEach(function(val) {
+                var url = 'http://www.nhl.com/scores/htmlreports/' + 
+                          getSeason(pageDate) + '/PL' + val.gameId + '.HTM';
+                          
+                var delay = intervalService.getNextWait([50, 1500]);
+                writeLogToFile(url, delay);            
+            });
         });
     });
 };
 
-main();
+var getSeason = function(dt) {    
+    var season = "";
+    if ( dt.isBefore(moment('2014/08/01')) ) {
+        season = (dt.year() - 1) + "" + dt.year();
+    } else {
+        season = dt.year() + "" + (dt.year() + 1);
+    }
 
+    return season;
+};
+
+main();
 
 function writeLogToFile(url, delay) {
     setTimeout(function() {
-        var pageHTML = getPageHTML(url, function(err, resp, body) {
+        var pageHTML = rowsProcessor.getPageHTML(url, function(err, resp, body) {
             var logJSON = rowsProcessor.run(body);
-            var jsonPath = "pbp\\json\\" + url.slice(url.length - 10, url.length - 4) + ".json";
+            
+            var jsonPath = "data\\pbp\\json\\" + url.slice(url.length - 10, url.length - 4) + ".json";
+            
             fs.writeFile(jsonPath, JSON.stringify(logJSON, null, 4), function(err) {
-                //console.log('file successfully written');                                         
+                if (err) console.log('error writing pbp json') ;
             });
             
             var csv = pbpConverter.json2Csv(logJSON);
             
-            var csvPath = "pbp\\csv\\" + url.slice(url.length - 10, url.length - 4) + ".csv";
+            var csvPath = "data\\pbp\\csv\\" + url.slice(url.length - 10, url.length - 4) + ".csv";
             fs.writeFile(csvPath, csv, function(err) {
-                console.log('csv written');            
+                if (err) console.log('error writing pbp csv');            
             });
             
         });
     }, delay);
-}
-
-var getPageHTML = function(url, callback) {
-    request(url, function(err, resp, body) {
-        body = body.split("&nbsp;").join(" ");
-        
-        console.log('making request to ' + url);
-        if (!err && resp.statusCode == 200) {
-            callback(err, resp, body);
-        }
-    });
 }
